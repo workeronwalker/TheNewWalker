@@ -5,30 +5,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.baidu.location.BDLocation;
-import com.baidu.mapapi.map.ArcOptions;
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BaiduMapOptions;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.MyLocationConfiguration;
-import com.baidu.mapapi.map.OverlayOptions;
-import com.baidu.mapapi.map.PolylineOptions;
-import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
-import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
-import com.example.thenewwalker.Outdoor.LocPoint;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +14,18 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BaiduMapOptions;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.example.thenewwalker.OutdoorDataManager.LocPoint;
 
 public class OutdoorFragment extends Fragment implements Observer{
 
@@ -48,6 +38,8 @@ public class OutdoorFragment extends Fragment implements Observer{
 	
 	private LocationMode mCurrentMode = null;
 	private BitmapDescriptor mCurrentMarker;
+	
+	private boolean newlyCreated = true;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +50,7 @@ public class OutdoorFragment extends Fragment implements Observer{
 		// mView.setId(1111);
 
 		Log.i("OutdoorFragment", "onCreate");
+		newlyCreated = true;
 
 		return mView;
 	}
@@ -66,36 +59,49 @@ public class OutdoorFragment extends Fragment implements Observer{
 	public void onStart() {
 		super.onStart();
 		Log.i("OutdoorFragment", "onStart");
-		View fragmentView = this.getView();
-		FrameLayout mFramLayout = (FrameLayout) fragmentView.findViewById(R.id.frameLayout_outdoor);
-		outdoorRadius = (TextView) fragmentView.findViewById(R.id._outdoor_radius);
-		outdoorLo = (TextView) fragmentView.findViewById(R.id._outdoor_lo);
-		outdoorHi = (TextView) fragmentView.findViewById(R.id._outdoor_hi);
-		
-		mMapView = getBDmapView();
-		// mMapView.setZ(-1);
-		mFramLayout.addView(mMapView);
-		
-		mBaiduMap = mMapView.getMap();
-		mCurrentMode = LocationMode.FOLLOWING;
-		mCurrentMarker = null;
-		mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
-				mCurrentMode, true, mCurrentMarker));
-		mBaiduMap.setMyLocationEnabled(true);
-		
-		MainActivity.outdoorDataSet.addObserver(this);
-		
-		if (!Outdoor.points.isEmpty()) {	// 有记录的点阵
-			drawHistroy();
+		if (newlyCreated == true) {
+			newlyCreated = false;
+			View fragmentView = this.getView();
+			FrameLayout mFramLayout = (FrameLayout) fragmentView.findViewById(R.id.frameLayout_outdoor);
+			outdoorRadius = (TextView) fragmentView.findViewById(R.id._outdoor_radius);
+			outdoorLo = (TextView) fragmentView.findViewById(R.id._outdoor_lo);
+			outdoorHi = (TextView) fragmentView.findViewById(R.id._outdoor_hi);
+			
+			mMapView = getBDmapView();
+			// mMapView.setZ(-1);
+			mFramLayout.addView(mMapView);
+			
+			mBaiduMap = mMapView.getMap();
+			mCurrentMode = LocationMode.FOLLOWING;
+			mCurrentMarker = null;
+			mBaiduMap.setMyLocationConfigeration(new MyLocationConfiguration(
+					mCurrentMode, true, mCurrentMarker));
+			mBaiduMap.setMyLocationEnabled(true);
 		}
 		
+		OutdoorService.mOutdoorDataManager.deleteObservers();
+		OutdoorService.mOutdoorDataManager.addObserver(this);
+		
+		if (!OutdoorDataManager.points.isEmpty()) {	// 有记录的点阵
+			drawHistroy();
+		}
 	}
+	@Override
+	public void onResume() {  
+        super.onResume();
+        Log.i("OutdoorFragment", "onResume");
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理  
+        mMapView.onResume();  
+    }
+
+	
 	private void drawHistroy() {
-		if (Outdoor.points.size() <= 2)
+		if (OutdoorDataManager.points.size() <= 2)
 			return;
-		for (int i = 1; i < Outdoor.points.size(); i++) {
-			if (Outdoor.points.get(i-1).isSuccessive == true)
-				drawLine(Outdoor.points.get(i-1), Outdoor.points.get(i));
+		for (int i = 1; i < OutdoorDataManager.points.size(); i++) {
+			if (OutdoorDataManager.points.get(i-1).isSuccessive == true)
+				drawLine(OutdoorDataManager.points.get(i-1), OutdoorDataManager.points.get(i));
+				
 		}
 	}
 
@@ -117,20 +123,22 @@ public class OutdoorFragment extends Fragment implements Observer{
 
 	@Override
 	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
+		// Log.i("OutdoorFragment", data.toString() + " Received");
+		
 		if (data.toString() == "direction") {
-			mBaiduMap.setMyLocationData(Outdoor.locData);
+			mBaiduMap.setMyLocationData(OutdoorDataManager.locData);
 		}
 		if (data.toString() == "location") {
-			if (Outdoor.points.size() <= 2)
+			if (OutdoorDataManager.points.size() <= 2)
 				return;
-			mBaiduMap.animateMapStatus(Outdoor.cMapStatus);
-			mBaiduMap.setMyLocationData(Outdoor.locData);
+			mBaiduMap.animateMapStatus(OutdoorDataManager.cMapStatus);
+			mBaiduMap.setMyLocationData(OutdoorDataManager.locData);
 			
-			int i = Outdoor.points.size() -1;
-			drawLine(Outdoor.points.get(i-1), Outdoor.points.get(i));
+			int i = OutdoorDataManager.points.size() -1;
+			drawLine(OutdoorDataManager.points.get(i-1), OutdoorDataManager.points.get(i));
 		}
 	}
+	
 	private void drawLine(LocPoint lPoint, LocPoint cPoint) {
 		List<LatLng> lcPoints = new ArrayList<LatLng>();
 
@@ -142,23 +150,15 @@ public class OutdoorFragment extends Fragment implements Observer{
 			.width(10)
 			.points(lcPoints);
 		mBaiduMap.addOverlay(ooPoly);
-		
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		if (MainActivity.outdoorDataSet.countObservers() > 0)
-			MainActivity.outdoorDataSet.deleteObservers();
+		if (OutdoorService.mOutdoorDataManager.countObservers() > 0)
+			OutdoorService.mOutdoorDataManager.deleteObservers();
 		mMapView.onPause();
 	}
-	
-	@Override
-	public void onResume() {  
-        super.onResume();  
-        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理  
-        mMapView.onResume();  
-    }  
 	
 	@Override  
     public void onDestroy() {  

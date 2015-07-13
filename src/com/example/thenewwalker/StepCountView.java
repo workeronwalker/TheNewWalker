@@ -19,18 +19,26 @@ public class StepCountView extends View {
 	private static final float START_ANGLE = -90;
 	private static final String GOAL_STRING = "目标 ";
 	private static final String STEP_STRING = "步数";
+	private static final String STEP_COST = "消耗了";
+	private static final String CALORIE = "卡路里";
+	private static final String SIMILAR = "相当于";
+	private static final String KILOMETER = "公里";
+	private static final String CONSUME_ARRAY[] = {"碗饭", "支冰激凌", "克肥肉"};
+	private static final double CALORIE_ARRAY[] = {200, 127, 8};
 	private static final int FLASH_FREQ = 50;
 	private static final int STEADY_FREQ = 2;
 	private static float flashR[] = new float[FLASH_FREQ];
 	private static float steadyFlash[] = new float[STEADY_FREQ];
+	private static int index;
 	
 	private static final int mColors[] = new int[] { 0x50FF0000, 0x50FFFF00, 0x5000FF00,
 		0x5000FFFF, 0x500000FF, 0x50FF00FF, 0x50FF0000  };
 	private static final int nAlphaColors[] = new int[] { 0xA0FF0000, 0xA0FFFF00, 0xA000FF00,
 		0xA000FFFF, 0xA00000FF, 0xA0FF00FF, 0xA0FF0000  };
 	
-	private static int myGreen, myAlphaGreen, myBlue, myGray; 
-
+	private static int myAlphaGreen, myBlue, myGray, myYellow; 
+	public static int myGreen;
+	
 	private static float centerX = 0, centerY = 0, radius = 0;
 	private static float MARGIN = 100;
 	private static float FONT_SIZE = 270;
@@ -38,7 +46,7 @@ public class StepCountView extends View {
 	
 	private static Shader mShader, nAlphaShader;
 	
-	public static boolean isSteady = false;
+	public static boolean isSteady = true;
 	
 	public StepCountView(Context context) {
 		super(context);
@@ -55,13 +63,60 @@ public class StepCountView extends View {
 		STROKE_WIDTH = width / 25;
 		
 		centerX = size.x / 2;
-		centerY = centerX;
+		
+	
+		
+		//´´´´´████████´´´´
+		//´´`´███▒▒▒▒███´´´´´
+		//´´´███▒●▒▒●▒██´´´
+		//´´´███▒▒▒▒▒▒██´´´´´
+		//´´´███▒▒⭕▒▒██´
+		//´´██████▒▒███´´´´´
+		//´██████▒▒▒▒███´´
+		//██████▒▒▒▒▒▒███´´´´
+		//´´▓▓▓▓▓▓▓▓▓▓▓▓▓▒´´
+		//´´▒▒▒▒▓▓▓▓▓▓▓▓▓▒´´´´´
+		//´.▒▒▒´´▓▓▓▓▓▓▓▓▒´´´´´
+		//´.▒▒´´´´▓▓▓▓▓▓▓▒
+		//..▒▒.´´´´▓▓▓▓▓▓▓▒
+		//´▒▒▒▒▒▒▒▒▒▒▒▒
+		//´´´´´´´´´███████´´´´
+		//´´´´´´´´████████´´´´´´
+		//´´´´´´´█████████´´´´´
+		//´´´´´´██████████´´´
+		//´´´´´´██████████´´
+		//´´´´´´´█████████´
+		//´´´´´´´█████████´
+		//´´´´´´´´████████´´´
+		//________▒▒▒▒▒
+		//_________▒▒▒▒
+		//_________▒▒▒▒
+		//________▒▒_▒▒
+		//_______▒▒__▒▒
+		//_____ ▒▒___▒▒
+		//_____▒▒___▒▒
+		//____▒▒____▒▒
+		//___▒▒_____▒▒
+//		    ███____  ▒▒
+		//   ████____███
+		//   █ _███_ _█_███            
+		
+		
+		boolean XiuGeKanZheLi = false;
+		if (XiuGeKanZheLi) {
+			//令条件为真，修改系数2可以改变离顶端的距离
+			centerY = centerX + 2 * MARGIN;
+		} else {
+			centerY = centerX;
+		}
+
+		
 		radius = centerX - MARGIN;
 		myGreen = Color.rgb(50, 200, 80);
 		myBlue = Color.rgb(40, 180, 250);
 		myGray = Color.rgb(215, 215, 215);
 		myAlphaGreen = Color.argb(85, 160, 250, 180);
-		
+		myYellow = Color.rgb(255, 205, 215);
 		float rangR = radius * 3 / 4;
 		rangR /= FLASH_FREQ;
 		for (int i=0; i < FLASH_FREQ; i++) {
@@ -72,6 +127,7 @@ public class StepCountView extends View {
 	    
 	    mShader = new SweepGradient(centerX, centerY, mColors, null);
 	    nAlphaShader = new SweepGradient(centerX, centerY, nAlphaColors, null);
+	    index = (int)(Math.random() * 3);
 	}
 	
 	@Override  
@@ -93,7 +149,7 @@ public class StepCountView extends View {
         		steadyFlash[StepDetector.steadyCount % STEADY_FREQ], mGradientPaint);
         } else {
         	canvas.drawCircle(centerX, centerY, 
-        		flashR[StepDetector.flashCount % FLASH_FREQ], paint);
+        		flashR[(int)(StepDetector.flashCount % FLASH_FREQ)], paint);
         }
         
         paint.setColor(myGray);      
@@ -134,12 +190,23 @@ public class StepCountView extends View {
         canvas.drawText(STEP_STRING, centerX, 
         		centerY - radius / 2, paint);
         
-        canvas.drawText(StepDetector.ACCELRATE+"", centerX, 
+        double kilometer = (int)(SettingFragment.stride * StepCountFragment.total_step / 10);
+        kilometer /= 100;
+        double calorieCost = ((int)(SettingFragment.weight * 3 * kilometer * 100)) / 450.0;
+        calorieCost = ((int)(calorieCost * 100)) / 100.0;
+        
+        double material_number = (int)(calorieCost * 10/ CALORIE_ARRAY[index]);
+        material_number /= 10.0;
+
+        canvas.drawText(SIMILAR + kilometer + KILOMETER, centerX, 
         		centerY + centerY + MARGIN, paint);
-        canvas.drawText(StepDetector.XY+"", centerX, 
-        		centerY + centerY + MARGIN + MARGIN, paint);
-        canvas.drawText(StepDetector.Z+"", centerX, 
-        		centerY + centerY + MARGIN + MARGIN + MARGIN, paint);
+        
+        paint.setColor(myYellow);
+        canvas.drawText(STEP_COST + calorieCost + CALORIE, centerX, 
+        		centerY + centerY + 2.5f * MARGIN, paint);
+        canvas.drawText(SIMILAR + material_number + CONSUME_ARRAY[index], centerX, 
+        		centerY + centerY + 3.5f * MARGIN, paint);
+        
         
         super.onDraw(canvas);  
     }  

@@ -19,12 +19,14 @@
     <string name="title_activity_outdoor">OutdoorActivity</string>
     <string name="title_activity_step_count">StepCountActivity</string>
     <string name="setting_name">姓\t\t\t\t名\t\t\t\t\t</string>
-    <string name="setting_date">生\t\t\t\t日\t\t\t\t\t</string>
-    <string name="setting_height">身\t\t\t\t高\t\t\t\t\t</string>
-    <string name="setting_weight">体\t\t\t\t重\t\t\t\t\t</string>
+    <string name="setting_date">年\t\t\t\t龄\t\t\t\t\t</string>
+    <string name="setting_height">身\t\t\t\高(cm)\t\t\t\t\t</string>
+    <string name="setting_weight">体\t\t\t\t重(kg)\t\t\t\t\t</string>
     <string name="setting_goal">目标步数\t\t\t</string>
-    <string name="setting_change">修改设置</string>
+    <string name="setting_change">修改个人资料</string>
     <string name="setting_save">保\t存\t✔</string>
     <string name="setting_cancel">取\t消\t✗</string>
+    <string name="cleanning">清除地图数据</string>
+    <string name="switching">\t\t激活行者锁屏\t\t</string>
 
 </resources>

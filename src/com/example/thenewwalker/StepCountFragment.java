@@ -35,7 +35,12 @@ public class StepCountFragment extends Fragment {
 	@SuppressLint("HandlerLeak")
 	Handler flashHandler = new Handler() {
 	    public void handleMessage(Message msg) {
+	        super.handleMessage(msg);	 
+	    	if ((int)StepDetector.flashCount % 50 != 0)
+	    		StepDetector.flashCount-=0.5;
+	    	
 	        super.handleMessage(msg);	        
+
 	        mView.invalidate();
 
 	    }
