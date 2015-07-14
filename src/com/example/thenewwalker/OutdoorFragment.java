@@ -99,7 +99,7 @@ public class OutdoorFragment extends Fragment implements Observer{
 		if (OutdoorDataManager.points.size() <= 2)
 			return;
 		for (int i = 1; i < OutdoorDataManager.points.size(); i++) {
-			
+
 			if (OutdoorDataManager.points.get(i-1).isSuccessive == true)
 				drawLine(OutdoorDataManager.points.get(i-1), OutdoorDataManager.points.get(i));
 				
@@ -145,6 +145,7 @@ public class OutdoorFragment extends Fragment implements Observer{
 
 		lcPoints.add(new LatLng(lPoint.latitute, lPoint.longitude));
 		lcPoints.add(new LatLng(cPoint.latitute, cPoint.longitude));
+
 		if (cPoint.color != -1) {
 			OverlayOptions ooPoly = new PolylineOptions()
 				.color(cPoint.color)
@@ -152,6 +153,7 @@ public class OutdoorFragment extends Fragment implements Observer{
 				.points(lcPoints);
 			mBaiduMap.addOverlay(ooPoly);
 		}
+
 	}
 
 	@Override

@@ -87,10 +87,11 @@ public class OutdoorDataManager extends Observable{
 			Log.i("Outdoor", "distance: " + OutdoorDataManager.distance);
 			double speed = (distance / time) * 0.8 + runSpeed * 0.2;
 			runSpeed = speed;
+
 			if (speed > 12) {
 				return -1;
 			}
-			
+
 			if (speed > hi) {
 				hi = speed;
 				// outdoorHi.setText("" + hi);

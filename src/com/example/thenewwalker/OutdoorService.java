@@ -169,18 +169,17 @@ public class OutdoorService extends Service{
 				int cColor;
 				if (OutdoorDataManager.points.size() <= 1)
 					cColor = -1;
+
 				else
 					cColor = OutdoorDataManager.getSpeedColor(runTime, 
 						new LatLng(OutdoorDataManager.points.get(OutdoorDataManager.points.size() -2).latitute, 
 								OutdoorDataManager.points.get(OutdoorDataManager.points.size() -2).longitude),
 						new LatLng(location.getLatitude(), location.getLongitude()));
-				
-				
+
 				boolean isSuccessive = true;
 				if (runTime > 10)
 					isSuccessive = false;
-				
-		
+
 				OutdoorDataManager.LocPoint locPoi = new OutdoorDataManager.LocPoint(location.getLatitude(), location
 						.getLongitude(), isSuccessive, cColor);
 				
@@ -196,7 +195,6 @@ public class OutdoorService extends Service{
 					mOutdoorDataManager.NotifyUI("location");
 				
 				runTime = 0; // 重新计时。
-				
 			}
 		}
 

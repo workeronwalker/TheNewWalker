@@ -52,8 +52,10 @@ public class LockScreenActivity extends Activity {
 
 		windowWidth = getWindowManager().getDefaultDisplay().getWidth();
 
+
 //		StepCountView.XiuGeKanZheLi = true;
 		mView = new StepCountView(this, true);
+
 
 		setContentView(mView);
 
@@ -70,7 +72,7 @@ public class LockScreenActivity extends Activity {
 				case MotionEvent.ACTION_MOVE:
 					if (getDistance(touch_x, touch_y, event.getRawX(),
 							event.getRawY()) > windowWidth / 2) {
-//						StepCountView.XiuGeKanZheLi = false;
+
 						v.setVisibility(View.GONE);
 						finish();
 					}
@@ -78,7 +80,7 @@ public class LockScreenActivity extends Activity {
 				case MotionEvent.ACTION_UP:
 					if (getDistance(touch_x, touch_y, event.getRawX(),
 							event.getRawY()) > windowWidth / 2) {
-//						StepCountView.XiuGeKanZheLi = false;
+
 						v.setVisibility(View.GONE);
 						finish();
 					}
@@ -103,7 +105,7 @@ public class LockScreenActivity extends Activity {
 			public void handleMessage(Message msg) {
 				super.handleMessage(msg);
 				StepCountFragment.total_step = StepDetector.CURRENT_STEP;
-				
+
 				mView.invalidate();
 			}
 		};
@@ -156,7 +158,7 @@ public class LockScreenActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-//		StepCountView.XiuGeKanZheLi = false;
+
 		// Don't hang around.
 		// finish();
 	}
@@ -164,7 +166,7 @@ public class LockScreenActivity extends Activity {
 	@Override
 	protected void onStop() {
 		super.onStop();
-//		StepCountView.XiuGeKanZheLi = false;
+
 		// Don't hang around.
 		// finish();
 	}

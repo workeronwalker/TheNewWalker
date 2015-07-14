@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest android:versionCode="1" android:versionName="1.0"
+    package="com.example.thenewwalker" 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-sdk android:minSdkVersion="14" 
+        android:targetSdkVersion="21"/>
+    <application android:allowBackup="true"
+        android:icon="@drawable/ic_launcher_faith"
+        android:label="@string/app_name" 
+        android:theme="@style/AppTheme">
+        <activity 
+            android:label="@string/app_name" 
+            android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        
+        <service 
+            android:enabled="true"
+            android:name="com.baidu.location.f" 
+            android:process=":remote"/>
+        <service 
+            android:enabled="true" 
+            android:name="StepServices">
+            <intent-filter>
+                <action 
+                    android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </service>
+        <meta-data 
+            android:name="com.baidu.lbsapi.API_KEY" 
+            android:value="y24sFG2ejFabSdmKhH93Fykf"/>
+        
+        <!--created by ADT ext plugin at 2015-07-11 16:01:05-->
+        <activity 
+            android:name=".LockScreenActivity"/>
+        <!--created by ADT ext plugin at 2015-07-11 16:08:39-->
+        <activity 
+            android:name=".LockScreenStartActivity"/>
+        <service 
+            android:enabled="true" 
+            android:name="StepServices"/>
+        <service 
+            android:enabled="true" 
+            android:name="OutdoorService"/>
+        <service 
+            android:enabled="true" 
+            android:name="LockScreenService"/>
+        
+        <service 
+            android:enabled="true" 
+            android:name="StepServices">
+            <intent-filter>
+                <action 
+                    android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </service>
+        <receiver 
+            android:name="BootBroadcastReceiver">
+            <intent-filter>
+                <action 
+                    android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category 
+                    android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </receiver>
+        <receiver 
+            android:name="AlarmReceiver"/>
+    </application>
+    <!-- Boot Broadcast Receiver -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- BaiduMap -->
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"/>
+    <!-- uses-permission android:name="android.permission.WRITE_APN_SETTINGS"/ -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_GPS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <!-- 来电消音 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <!-- 锁屏用按键 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+</manifest>

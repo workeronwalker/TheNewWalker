@@ -57,7 +57,7 @@ public class SettingFragment extends Fragment {
 			weight = 55;
 		else
 			weight = Double.parseDouble(weightString);
-		
+
 		if (checkedString.equals("YES")) {
 			getActivity().startService(new Intent(getActivity(), LockScreenService.class));
 			lockSwitch.setChecked(true);

@@ -45,7 +45,7 @@ public class StepCountView extends View {
 	private static float STROKE_WIDTH = 35;
 	
 	private static Shader mShader, nAlphaShader;
-	
+
 	public static boolean isSteady = false;
 	public static boolean XiuGeKanZheLi = false;
 	
@@ -203,17 +203,11 @@ public class StepCountView extends View {
         		centerY + centerY + MARGIN, paint);
         
         paint.setColor(myYellow);
-        
+
         canvas.drawText(STEP_COST + calorieCost + CALORIE, centerX, 
         		centerY + centerY + 2.5f * MARGIN, paint);
         canvas.drawText(SIMILAR + material_number + CONSUME_ARRAY[index], centerX, 
         		centerY + centerY + 3.5f * MARGIN, paint);
-        
-//        canvas.drawText(STEP_COST + StepDetector.interval + CALORIE, centerX, 
-//        		centerY + centerY + 2.5f * MARGIN, paint);
-//        canvas.drawText(SIMILAR + StepDetector.inCommingInc + CONSUME_ARRAY[index], centerX, 
-//        		centerY + centerY + 3.5f * MARGIN, paint);
-        
         
         
         super.onDraw(canvas);  

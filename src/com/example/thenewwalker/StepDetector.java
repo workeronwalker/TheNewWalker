@@ -18,6 +18,7 @@ public class StepDetector implements SensorEventListener {
 
 	private static final float GRAVITY = 9.08665f;
 	private static final float NOISE = 0.0001f;
+
 //	private static final float ZSCALE = 0.8660f; // 用于消除Z轴的影响，检测手机3轴状态
 	private static final float ZSCALE = 0.9397f;
 
@@ -33,6 +34,7 @@ public class StepDetector implements SensorEventListener {
 
 	private ArrayList<Double> thredholdBackup = new ArrayList<Double>();
 	private ArrayList<Double> biggestValue = new ArrayList<Double>();
+
 
 	private static boolean gravityRead = false;
 	private static boolean accelerationRead = false;
@@ -151,12 +153,11 @@ public class StepDetector implements SensorEventListener {
 						DealInterval(stepIncrease);
 					}
 
-
-
 				}
 			}
 		}
 	}
+
 	private static int isInHandCount = 0;
 	private static boolean currentInHand = false;
 	
@@ -220,7 +221,10 @@ public class StepDetector implements SensorEventListener {
 				pendingSteps = 0;
 				intervalSum = 0;
 				flashCount = 0;
+
 			}
+		} else {
+			// writer.write("10" + "," + "-10" + ",");
 		}
 
 //		if (interval >= MININTERVAL && interval <= MAXINTERVAL && StepCountView.isSteady
