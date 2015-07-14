@@ -102,6 +102,7 @@ public class StatisticView extends View {
          
         	mPaint.setColor(myRed);
         	mPaint.setStrokeWidth(GRAPHIC_SIZE);
+
        	
         	canvas.drawLine(pointAdjust.get(index).get(X_KEY),
             		pointAdjust.get(index).get(Y_KEY) - GRAPHIC_MARGIN,  
@@ -110,7 +111,7 @@ public class StatisticView extends View {
 
             if (index > 0)  
             {  
-            	mPaint.setStrokeWidth(LINE_WIDTH);
+            	mPaint.setStrokeWidth(GRAPHIC_SIZE/2);
                 canvas.drawLine(pointAdjust.get(index-1).get(X_KEY),
                 		pointAdjust.get(index-1).get(Y_KEY),  
                 		pointAdjust.get(index).get(X_KEY), 

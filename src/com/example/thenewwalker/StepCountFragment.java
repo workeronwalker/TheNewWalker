@@ -35,7 +35,12 @@ public class StepCountFragment extends Fragment {
 	@SuppressLint("HandlerLeak")
 	Handler flashHandler = new Handler() {
 	    public void handleMessage(Message msg) {
+	        super.handleMessage(msg);	 
+	    	if ((int)StepDetector.flashCount % 50 != 0)
+	    		StepDetector.flashCount-=0.5;
+	    	
 	        super.handleMessage(msg);	        
+
 	        mView.invalidate();
 
 	    }
@@ -57,7 +62,6 @@ public class StepCountFragment extends Fragment {
 	                        Message msg = new Message();
 	                        handler.sendMessage(msg);
 	                    }
-	                    
 	                }
 	            }
 	        });
@@ -71,6 +75,7 @@ public class StepCountFragment extends Fragment {
 	    	fThread = new Thread(new Runnable() {
 	           public void run() {
 	                while (true) {
+	                	StepCountView.XiuGeKanZheLi = false;
 	                    try {
 	                        Thread.sleep(20);
 	                    } catch (InterruptedException e) {
@@ -90,8 +95,8 @@ public class StepCountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 		
-		if (mView == null)
-			mView = new StepCountView(getActivity());
+		// StepCountView.XiuGeKanZheLi = false;
+		mView = new StepCountView(getActivity(), false);
 		
 		getActivity().setTitle("计步器");
 		init();

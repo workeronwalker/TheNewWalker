@@ -23,9 +23,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 		int rDate = reader.getInt("rDate", 0);
 		
 		if (rDate != date) {
-
 			SharedPreferences.Editor editor = context.getSharedPreferences("dataOfDate", 0).edit();
 	        editor.putInt("rDate", date);
+	        
+	        StepDetector.CURRENT_STEP = 0;
 	        editor.putInt(rDate+"", StepDetector.CURRENT_STEP);
 	        editor.commit();
 	        
@@ -37,7 +38,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 	        context.stopService(stepService);
 	        context.startService(stepService);
 		}
-		
 	}
 
 }
